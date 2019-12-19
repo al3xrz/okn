@@ -1,0 +1,175 @@
+/*!
+ * Start Bootstrap - 4 Col Portfolio (https://startbootstrap.com/template-overviews/4-col-portfolio)
+ * Copyright 2013-2018 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-4-col-portfolio/blob/master/LICENSE)
+ */
+
+body{
+
+	font-family: 'Roboto', sans-serif;
+}
+.my_table_ tr td{
+		vertical-align:middle;
+		text-align:left;
+		padding-left:10px;
+}
+
+.my_table_ tr th{
+		vertical-align:middle;
+		text-align:left;
+		padding-left:10px;
+}
+
+
+body {
+	padding-top: 150px;
+}
+
+@media (min-width: 992px) {
+	body {
+		padding-top: 150px;
+	}
+}
+
+.portfolio-item {
+	margin-bottom: 30px;
+}
+
+.pagination {
+	margin-bottom: 30px;
+}
+
+
+.table_more_information tr{
+	padding-bottom:80px !important;
+	/* width: 100% !important;  */
+}
+
+.table_more_information tr td{
+	text-align: left;
+	padding-left: 40px;
+	padding-right: 40px;
+}
+
+
+/* my code */
+
+
+body nav a{
+	color:#fff !important;
+}
+
+.form-control{
+	/* padding:3px 10px !important; */
+	height:30px;
+	font-size:14px;
+	margin-right:0px !important;
+	margin-left:0px !important;
+	background: #FFFFFF;
+	border: 0.5px 0.5px 0px 0.5px solid #2A3F6A !important;
+	box-sizing: border-box !important;
+	border-radius: 5px 5px 5px 5px !important;
+	/*min-width: 200px;*/
+}
+
+
+.form-inline {
+	display: inline-block;
+  margin-bottom: 0;
+	vertical-align: middle;
+	min-width: 200px;
+
+}
+
+
+.my_table_ tr td, .my_table_ tr th{
+	text-align: center;
+	font-size:10px;
+}
+
+
+.my_table_ tr th{
+    background: #e7e7e7;
+}
+
+
+.filter_button a{
+	border: 1px solid #2A3F6A;
+	box-sizing: border-box;
+	border-radius: 5px;
+	color: #2A3F6A;
+}
+
+.filter_button a:hover{
+	border: 1px solid #2A3F6A;
+	color: #fff !important;
+	background: #2A3F6A !important;
+}
+
+.my_form_base_layout button{
+
+	margin-left:-4px; height:30px; 
+	border: 0.5px solid #2A3F6A; 
+	box-sizing: border-box; 
+	border-radius: 5px 5px 5px 5px; 
+	border: 0px 0.5px 0.5px 0.5px solid #2A3F6A !important; 
+	color: #2A3F6A;
+	padding-left:15px;
+	padding-right:15px;
+}
+
+.my_form_base_layout button:hover{
+	border: 0px 0.5px 0.5px 0.5px solid #2A3F6A !important; 
+	background: #2A3F6A;
+	color: #fff !important;
+}
+
+.table-nonfluid {
+	width: auto !important;
+}
+
+.active_link{
+	text-decoration: underline;
+}
+
+.nav-item a:hover{
+	text-decoration: underline;
+}
+
+.nav-link{
+	padding-bottom: 10px;
+}
+
+.modal-ku {
+	min-width: 500px;
+	width: 80% !important;
+	margin: auto;
+  }
+
+  /* test classes*/
+
+  .filter-select-class-medium {
+		border: none;
+		width: 170px;
+		text-align: center;
+		padding: 3px;
+		border-radius: 3px 3px 3px 3px;
+  }
+
+
+  .filter-select-class-long {
+	
+	border: none;
+	width: 220px;
+	text-align: center;
+	padding: 3px;
+	border-radius: 3px 3px 3px 3px;
+	
+	}
+	
+	.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}
+

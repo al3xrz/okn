@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+
+
+
+
+{%block title%}{{data.nativeName}}{%endblock%}
+
+{%block content%}
+
+
+
+<script type="text/javascript">
+
+var id = {{ data.id}}
+
+$(document).ready(function(){
+            console.log(id)
+             
+         //    var id = e.relatedTarget.dataset.id;
+             const url = '/api/objects/'+id;
+             $("#my_slider_id").empty();
+             $.getJSON(url, function (data) {
+                 if((data.nativeName!==null)&&(data.nativeName!=='None')) { 
+                     $('#modal_nativeName').text(data.nativeName);  
+                     $('#exampleModalLabel').text(data.nativeName);  
+                 } else {
+                     $('#modal_nativeName').text('');
+                     $('#exampleModalLabel').text('');  
+                 }
+                 if((data.fullAddress!==null)&&(data.fullAddress!=='None')) { $('#modal_fullAddress').text(data.fullAddress);
+                 } else {
+                     $('#modal_fullAddress').text('');
+                 }
+                 if((data.municipality!==null)&&(data.municipality!=='None')) { $('#modal_municipality').text(data.municipality.name);
+                 } else {
+                     $('#modal_municipality').text('');
+                 }
+                 if((data.locality!==null)&&(data.locality!==null)) { $('#modal_locality').text(data.locality.name);  
+                 }else {
+                     $('#modal_locality').text('');
+                 }
+                 if(data.images.length>0){
+                    for(key in data.images) {
+                        console.log(data.images[key]);
+                        $('#my_slider_id').
+                            append("<a href='/media/" + data.images[key]+
+                                   "' ><img src='/media/"+data.images[key]+
+                                   "' style='width:100px; padding-left:5px'></a>");
+                    
+                    }
+          
+                 } else {
+                    //   $('#modal_photo').attr('src', "/media/img/noImage.png");
+                    //   $('#img_ref').attr('href', "/media/img/noImage.png");
+                    $('#my_slider_id').
+                    append("<img src='/media/img/noImage.png' style='width:100px;'></img>");
+                  
+                 }
+                 if((data.description!==null)&&(data.description!=='None')) { $('#modal_description').text(data.description);  
+                 } else {
+                     $('#modal_description').text('');
+                 }
+                 if((data.affiliation_U!==null)&&((data.affiliation_U!=='None'))) { $('#modal_affiliation_U').text(data.affiliation_U);
+                 } else {
+                     $('#modal_affiliation_U').text('');
+                 }
+                 if((data.esp_valuable_object!==null)&&(data.esp_valuable_object!=='None')) { $('#modal_esp_valuable_object').text(data.esp_valuable_object);
+                 } else {
+                     $('#modal_esp_valuable_object').text('');
+                 }
+                 if((data.requisites_and_title!==null)&&(data.requisites_and_title!=='None')) { $('#modal_requisites_and_title').text(data.requisites_and_title); 
+                 } else {
+                     $('#modal_requisites_and_title').text('');
+                 }
+                 if((data.gen_species_appearance!==null)&&(data.gen_species_appearance!==null)) { $('#modal_gen_species_appearance').text(data.gen_species_appearance.name); 
+                 } else {
+                     $('#modal_gen_species_appearance').text('');
+                 }
+                 if((data.category_type!==null)&&(data.category_type!==null)) { $('#modal_category_type').text(data.category_type.name); 
+                 } else {
+                     $('#modal_category_type').text('');
+                 }
+                 if((data.reg_number!==null)&&(data.reg_number!==null)) { $('#modal_reg_number').text(data.reg_number); 
+                } else {
+                    $('#modal_reg_number').text('');
+                }
+                if((data.documents!==null)&&(data.documents!==null)) { 
+                    $('#modal_documents').text(data.documents);
+                    $('#modal_documents').attr("href", data.documents); 
+                } else {
+                    $('#modal_documents').text('');
+                }
+                $('#modal_url').text('http://www.oknrd.ru/objects/'+data.id)
+                $('#modal_url').attr('href', '/objects/'+data.id)
+
+             })
+
+});
+</script>
+
+
+<div class="container" id="more_information">
+        <div class="col-12" >
+          
+            <table class="table_more_information">
+                <tr>
+                    <td  style="width:40%">Наименование:</td>
+                    <td  style="width:60%; text-align: right;" id='modal_nativeName'></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <tr>
+                    <td>Полный адрес:</td>
+                    <td id='modal_fullAddress' style="width:60%; text-align: right;"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <tr>
+                    <td>Муниципальное образование:</td>
+                    <td id='modal_municipality' style="width:60%; text-align: right;"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <tr>
+                    <td>Населенный пункт:</td>
+                    <td id='modal_locality' style="width:60%; text-align: right;"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+               
+                <tr>
+                    <td>Фото:</td>
+                    <td style="width:60%; text-align: right;">
+                        <div class='my-slider' id='my_slider_id' style="white-space:nowrap; overflow-x:auto; width:560px; margin-right:0px" >
+                            
+                        </div>
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+               
+                <tr>
+                    <td>Описание:</td>
+                    <td id='modal_description' style="width:60%; text-align: right;"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <tr>
+                    <td>Принадлежность к ЮНЭСКО:</td>
+                    <td id='modal_affiliation_U' style="width:60%; text-align: right;"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <tr>
+                    <td>Особо ценный объект:</td>
+                    <td id='modal_esp_valuable_object' style="width:60%; text-align: right;"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <tr>
+                    <td>Реквизиты и наименование акта органа государственной власти о постановке на государственную охрану объекта культурного наследия:</td>
+                    <td id='modal_requisites_and_title' style="width:60%; text-align: right;"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+               
+                <tr>
+                    <td>Общая видовая принадлежность:</td>
+                    <td id='modal_gen_species_appearance' style="width:60%; text-align: right;"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+
+                <tr>
+                    <td>Категория объекта:</td>
+                    <td id='modal_category_type' style="width:60%; text-align: right;"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+
+                <tr>
+                    <td>Регистрационный номер ЕГОКН:</td>
+                    <td id='modal_reg_number' style="width:60%; text-align: right;"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+
+                <tr>
+                    <td>Документ:</td>
+                    <td  style="width:60%; text-align: right;"><a id='modal_documents' href='#'></a></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+
+                <tr>
+                    <td>Постоянный  URL:</td>
+                    <td  style="width:60%; text-align: right;"><a id='modal_url' href='#'></a></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+            </table>
+            </div>
+      </div>
+ {%endblock%}

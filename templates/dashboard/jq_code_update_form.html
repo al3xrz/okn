@@ -1,0 +1,77 @@
+<script>
+  $(".id_data").on('click', function(){
+    var id_row = $(this).attr("data-id")
+    console.log(id_row)
+
+    data = {
+      'id_row': id_row,
+    }
+    $.ajax({
+      type: "GET",
+      url: "{% url 'get_id_data'%}",
+      data: data,
+      dataType: "json",
+      success: function(data){
+      console.log("This is id data")
+        console.log(data)
+        console.log(data.fields.nativeName)
+        $("#id_row_data").val(data.pk)
+        $("#id_slug").val(data.fields.slug)
+        $("#id_id_openData").val(data.fields.id_openData)
+        $("#id_nativeName").val(data.fields.nativeName)
+        $("#id_fullAddress").html(data.fields.fullAddress)
+        $("#id_municipality").val(data.fields.municipality)
+        $("#id_locality").val(data.fields.locality)
+
+
+        $("#id_OKN_in_ensemble").val(data.fields.OKN_in_ensemble);
+
+        $("#id_information_sign").val(data.fields.information_sign)
+
+        $("#id_information_sign_photo").attr('src', data.fields.information_sign_photo);
+
+        $("#id_information_sign_conformity").val(data.fields.information_sign_conformity)
+
+
+        //$("#id_photo").val(data.fields.photo)
+        $("#id_url").val(data.fields.url)
+        $("#id_description").val(data.fields.description)
+
+
+          $("#id_affiliation_U").val(data.fields.affiliation_U);
+
+
+        $("#id_esp_valuable_object").val(data.fields.esp_valuable_object);
+
+
+
+        $("#id_requisites_and_title").html(data.fields.requisites_and_title)
+        $("#id_owner").val(data.fields.owner)
+        $("#id_management").val(data.fields.management)
+        $("#id_owner_contacts").val(data.fields.owner_contacts)
+        $("#id_has_security_obligation").val(data.fields.has_security_obligation)
+        $("#id_has_passport_OKN").val(data.fields.has_passport_OKN)
+        $("#id_actual_address").val(data.fields.actual_address)
+        $("#id_gen_species_appearance").val(data.fields.gen_species_appearance)
+        $("#id_req_of_approval").html(data.fields.req_of_approval)
+
+
+        $("#id_has_docs_boundaries").val(data.fields.has_docs_boundaries);
+
+
+
+        $("#id_has_docs_of_aprroval").val(data.fields.has_docs_of_aprroval);
+
+
+        $("#id_document_on_approved_security").val(data.fields.document_on_approved_security);
+
+
+        $("#id_has_rights").val(data.fields.has_rights);
+
+
+        $("#id_date").val(data.fields.date)
+        console.log("Hello world")
+      }
+    })
+  })
+</script>

@@ -1,0 +1,70 @@
+.my_data_table {
+    font-size: 11px
+}
+.dataTables_filter {
+    display: none;
+}
+.searchbox {
+    width :300px;
+    min-width: 100px;
+    vertical-align: middle;
+  
+}
+
+
+.nativeName-href {
+    padding-left:23px;
+}
+
+
+table.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #ffffff;
+}
+
+table.table-striped tbody tr:nth-of-type(even) {
+    background-color: #ffffff;
+}
+
+thead {
+    background-color: #E7E7E7;
+    text-align: center;
+}
+
+td {
+    text-align: center;
+}
+
+/*
+.filter-row-class {
+    background-color: white;
+    border: 0;
+    
+}
+*/
+
+tr.noBorder th {
+    border: 0;
+    background-color: white;
+    border-style: hidden;
+  }
+
+.f-button {
+
+    margin-left : 5px;
+} 
+
+div.jfilestyle.jfilestyle-theme-custom input {
+	height:30px;
+	font-size:14px;
+	margin-right:0px !important;
+	margin-left:0px !important;
+	background: #FFFFFF;
+	border: 0.5px 0.5px 0px 0.5px solid #2A3F6A !important;
+	box-sizing: border-box !important;
+    border-radius: 5px 5px 5px 5px !important;
+    width: 400px;
+}
+
+div.jfilestyle.jfilestyle-theme-custom label {
+	
+}

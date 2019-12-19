@@ -1,0 +1,49 @@
+.my_data_table {
+    font-size: 11px
+}
+.dataTables_filter {
+    display: none;
+}
+.searchbox {
+    width :300px;
+    min-width: 100px;
+    vertical-align: middle;
+  
+}
+
+
+.nativeName-href {
+    padding-left:23px;
+}
+
+
+table.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #ffffff;
+}
+
+table.table-striped tbody tr:nth-of-type(even) {
+    background-color: #ffffff;
+}
+
+thead {
+    background-color: #E7E7E7;
+    text-align: center;
+}
+
+td {
+    text-align: center;
+}
+
+/*
+.filter-row-class {
+    background-color: white;
+    border: 0;
+    
+}
+*/
+
+tr.noBorder th {
+    border: 0;
+    background-color: white;
+    border-style: hidden;
+  }

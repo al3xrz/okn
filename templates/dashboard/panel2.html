@@ -1,0 +1,340 @@
+{% load bootstrap %}
+{% csrf_token %}
+    
+<html>
+<style type="text/CSS">
+    .my_data_table {
+        font-size: 10px
+    }
+</style>
+<head>
+    <meta charset="utf-8">
+    <meta name="description">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css">
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
+</head>
+<body>
+
+    <div class="container-fluid" style='padding-top:20px'>
+        <div class="row">
+            <div class="col-sm-12">
+                <table id="objects" class="table table-striped table-bordered my_data_table" style="width:100%" data-server-side="true" data-ajax="/api/objects/?format=datatables">
+                    <thead>
+                        <tr id='filter-row'>
+                            <th></th>
+                            <th ></th>
+                            <th id='m_h_id'>
+                                <select id="m_select_id" style="width:200px">
+                                    <option value=""></option>
+                                </select>
+                            </th>
+                            <th></th>
+                            
+                            <th id='l_h_id'>
+                              <select id="l_select_id" style="width:200px">
+                                   <option value=""></option>
+                              </select>
+                            </th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th id='o_h_id'>
+                             <select id="o_select_id" style="width:150px">
+                                   <option value=""></option>
+                              </select>
+                            </th>
+                            <th></th>
+                            <th id='c_h_id'>
+                             <select id="c_select_id" style="width:150px">
+                                   <option value=""></option>
+                              </select>
+                            </th>
+                            <th></th>
+                        </tr>
+           
+                        <tr>
+                            <th data-data="id">id</th>
+                            <th data-data="nativeName">Наименование</th>
+                            <th data-data="municipality.name" data-name='municipality.name'>Муниципальное образование</th>
+                            <th data-data="municipality.id" data-name='municipality.id'>municipality_id</th>
+                            <th data-data="locality.name" data-name='locality.name' >Населенный пункт</th>
+                            <th data-data="locality.id" data-name='locality.id'>locality_id</th>
+                            <th data-data="fullAddress">Адрес</th>
+                            <th data-data="create_date">Дата создания</th>
+                            <th data-data="object_type.name" data-name="object_type.name">Тип объекта</th>
+                            <th data-data="object_type.id" data-name="object_type.id">object_type_id</th>
+                            <th data-data="category_type.name" data-name="category_type.name">Категория объекта</th>
+                            <th data-data="category_type.id" data-name="category_type.id">category_type_id</th>
+                        </tr>
+                    </thead>
+                   
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+           
+           function fill_category_types(){
+               let dropdown = $('#c_select_id');
+                dropdown.empty();
+                dropdown.append('<option selected="true" value="">Все категории объектов</option>');
+                dropdown.prop('selectedIndex', 0);
+
+                const url = 'http://127.0.0.1:8000/api/category_types';
+
+                $.getJSON(url, function (data) {
+                    //console.log()
+                    $.each(data['results'], function (key, entry) {
+                        dropdown.append($('<option></option>').attr('value', entry.id).text(entry.name));
+                    })
+                })
+            }
+           
+           
+           
+           function fill_object_types(){
+               let dropdown = $('#o_select_id');
+                dropdown.empty();
+                dropdown.append('<option selected="true" value="">Все типы объектов</option>');
+                dropdown.prop('selectedIndex', 0);
+
+                const url = 'http://127.0.0.1:8000/api/object_types';
+
+                $.getJSON(url, function (data) {
+                    //console.log()
+                    $.each(data['results'], function (key, entry) {
+                        dropdown.append($('<option></option>').attr('value', entry.id).text(entry.name));
+                    })
+                })
+            }
+           
+           function fill_municipality(){
+               let dropdown = $('#m_select_id');
+                dropdown.empty();
+                dropdown.append('<option selected="true" value="">Все муниципальные образования</option>');
+                dropdown.prop('selectedIndex', 0);
+
+                const url = 'http://127.0.0.1:8000/api/municipalities';
+
+                $.getJSON(url, function (data) {
+                    //console.log()
+                    $.each(data['results'], function (key, entry) {
+                        dropdown.append($('<option></option>').attr('value', entry.id).text(entry.name));
+                    })
+                })
+            }
+
+
+
+
+           function fill_locality(m_id){
+               let dropdown = $('#l_select_id');
+                dropdown.empty();
+                dropdown.append('<option selected="true" value="0">Все населенные пункты</option>');
+                dropdown.prop('selectedIndex', 0);
+
+                const url = 'http://127.0.0.1:8000/api/localities';
+                if(m_id==0){
+                    $.getJSON(url, function (data) {
+                    //console.log()
+                    $.each(data['results'], function (key, entry) {
+                         dropdown.append($('<option></option>').attr('value', entry.id).text(entry.name));
+                    })
+                })    
+                } else {
+                    $.getJSON(url, function (data) {
+                    //console.log()
+                    $.each(data['results'], function (key, entry) {
+                        if(m_id==entry.municipality){
+                            dropdown.append($('<option></option>').attr('value', entry.id).text(entry.name));
+                        }
+                    })
+                })    
+                }
+            }
+            
+            
+
+            $(document).ready(function() {
+                fill_municipality();
+                fill_locality(0);
+                fill_object_types();
+                fill_category_types();
+              
+                $(function(){
+                        $('#c_select_id').change(function(){
+                            var selector = document.getElementById('c_select_id');
+                            id_category_type = selector[selector.selectedIndex].value;
+                            //alert(id_category_type)
+                            table
+                                .columns(11)
+                                .search(id_category_type)
+                                .draw();
+                            if(id_category_type==11){
+                                table
+                                .columns(9)
+                                .search('')
+                                .draw();
+                            }
+                            });
+                 });
+
+
+                $(function(){
+                        $('#o_select_id').change(function(){
+                            var selector = document.getElementById('o_select_id');
+                            id_object_type = selector[selector.selectedIndex].value;
+                            //alert(id_object_type)
+                            table
+                                .columns(9)
+                                .search(id_object_type)
+                                .draw();
+                            if(id_object_type==0){
+                                table
+                                .columns(9)
+                                .search('')
+                                .draw();
+                            }
+                            });
+                 });
+
+
+                $(function(){
+                        $('#m_select_id').change(function(){
+                            var selector = document.getElementById('m_select_id');
+                            id_municipality = selector[selector.selectedIndex].value;
+
+                            fill_locality(id_municipality);
+                            table
+                                .columns(3)
+                                .search(id_municipality)
+                                .draw();
+                            if(id_municipality==0){
+                                table
+                                .columns(3)
+                                .search('')
+                                .draw();
+                            }
+                                table
+                                .columns(5)
+                                .search('')
+                                .draw();
+                        });
+                });
+
+                $(function(){
+                        $('#l_select_id').change(function(){
+                            var selector = document.getElementById('l_select_id');
+                            id_locality = selector[selector.selectedIndex].value;
+                            table
+                                .columns(5)
+                                .search(id_locality)
+                                .draw();
+                            if(id_locality==0){
+                                table
+                                .columns(5)
+                                .search('')
+                                .draw();
+                            }
+                            });
+                 });
+
+
+            
+//-------------------------------------------------------------------------------------------------
+                function is_null(data){
+                    if(data!==null){
+                        return data.name;
+                    } else {
+                    return ''
+                }}
+                
+                function is_null_id(data){
+                    if(data!==null){
+                        return data.id;
+                    } else {
+                    return ''
+                }}
+                
+                var table = $('#objects').DataTable({
+                            
+                            
+                    'initComplete': function () {
+                   
+                    },   
+                    //'orderCellsTop': true,
+                    "order": [[ 2, "asc" ]],
+                    'fixedHeader': true,
+                    'serverSide': true,
+                    'ajax': '/api/objects/?format=datatables',
+                    "language": {
+                        "lengthMenu": "Показывать  _MENU_  записей на странице",
+                        "zeroRecords": "К сожалению ничего не найдено",
+                        "info": "Страница _PAGE_ из _PAGES_",
+                        "infoEmpty": "Информация отсутствует"
+                        //"infoFiltered": "(filtered from _MAX_ total records)"
+                    },
+                    "columns": [
+                        {  //"targets": 0,
+                            "data": "id",
+                            "visible" : false
+                        },
+                        { "data": "nativeName", 
+                        "render": function ( data, type, row, meta ) {
+                                        return '<a href="'+row.id+'"><b>'+data+'</b></a>';
+                        }},
+                        { "data": "municipality",
+                            "render": function(data, type, row, meta ){
+                                return is_null(data);
+                        }},
+                        { "data": "municipality",
+                          "visible" : false,
+                            "render": function(data, type, row, meta ){
+                                return is_null_id(data);
+                        }},
+                        
+                        { "data": "locality",
+                          "render": function(data, type, row, meta ){
+                                return is_null(data);
+                        }},
+                          { "data": "locality",
+                            "visible" : false,
+                            "render": function(data, type, row, meta ){
+                                return is_null_id(data);
+                        }},
+                      
+                        { "data": "fullAddress" },
+                        { "data": "create_date" },
+                        { "data":  "object_type",
+                          "render": function(data, type, row, meta ){
+                                return is_null(data);
+                        }},
+                        { "data":  "object_type",
+                          "visible" : false,
+                           "render": function(data, type, row, meta ){
+                                return is_null_id(data);
+                        }},
+                        
+                        { "data": "category_type",
+                          "render": function(data, type, row, meta ){
+                                return is_null(data);
+                        }},
+                        { "data": "category_type",
+                          "visible" : false,
+                          "render": function(data, type, row, meta ){
+                                return is_null_id(data);
+                        }},
+                    ]
+                });
+            //------------------------------------------------------------------------
+
+            });
+
+    
+    </script>
+    
+</body>
+</html>

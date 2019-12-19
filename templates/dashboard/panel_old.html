@@ -1,0 +1,631 @@
+{% extends 'base.html' %}
+{% load bootstrap %}
+{% load crispy_forms_tags %}
+
+{% block title %}Panel{% endblock %}
+
+{% block content %}
+<div class="">
+    <div class='container-fluid'>
+      <div class='row' style='margin-bottom:30px; padding-left:50px;'>
+        <div  class='col-12'>
+            <div style='width:100%; margin-bottom:30px;'>
+                {% if bread %}
+                <span style='margin-right:10px;'><a href='' style='color:#787878'>Главная</a></span><span style='margin-right:10px;'><img src="/media/img/arrow_right.png"></span>
+                <span style='margin-right:10px;'><a href='' style='color:#787878'>Открытые данные</a></span><span style='margin-right:10px;'><img src="/media/img/arrow_right.png"></span>
+                    {% for item in bread %}
+                        <span style='margin-right:10px;'><a href=''>{{item}}</a></span><span style='margin-right:10px;'>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <h2>
+            Агентство по охране культурного наследия<br>
+            Республики Дагестан
+            </h2>
+        </div>
+      </div>
+      <div class='row' style='margin-bottom:30px; padding-left:50px;'>
+            <div class='col-12'>
+                <span  class='filter_button'>
+                    <a style='display:inline-block;' id="filter_button" class="btn btn-sm btn-outline-secondary"> 
+                    <!--
+                    data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample" style=''>
+                    -->    
+                        Фильтр
+                    </a>
+                    <form style='display:inline-block; margin-left:20px' class="form-inline my-2 my-lg-0 my_form_base_layout" action="{% url 'search' %}" method="get">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Поиск..." aria-label="Search" name="q">
+                        <button class="btn btn-sm btn-outline-primary" type="submit" style='maring:0px;'>Поиск</button>
+                    </form>
+                </span>
+            </div>
+        </div>
+      
+    </div>
+    
+
+            <!--<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script> -->
+            <script>
+   
+                
+
+                $(document).ready(function(){
+                       document.getElementById("collapseExample").style.display = 'none';
+                       if(localStorage.getItem('is_collapsed')!==null){
+                           
+                       }
+                       else{
+                           document.getElementById("collapseExample").style.display = 'table-row';
+                       }
+                       fill_locality();
+                       setTimeout(set_locality, 1200);
+                   
+	            });
+
+                function set_locality(){
+                    $("#id_locality [value="+localStorage.getItem('selected_locality_value')+"]").attr("selected", true);
+                }
+                
+
+                function fill_locality() {
+                   if($('#id_municipality').val()==""){
+                           	// вставить полное заполнение списка
+                               
+                            //var select = document.getElementById("id_locality");
+                            //select.options.length = 0;   
+                            //select.options[select.options.length] = new Option('-----------', '');                                        
+						    
+                            return;
+                        }
+                    var municipality_id = $('#id_municipality option:selected').val();
+                    //alert(municipality_id);
+                    search_results(municipality_id);
+                    }
+
+                
+                function submit_filter(){
+                    var form = document.getElementById("filter_form");
+                    form.submit();
+                }
+
+
+                $(function(){
+                    $('#id_municipality').change(function(){
+                        var selector = document.getElementById('id_municipality');
+                        localStorage.setItem('selected_municipality_value', selector[selector.selectedIndex].value);
+                        //fill_locality();
+                        submit_filter();
+                        //alert(localStorage.getItem('selected_municipality_value'));
+                    });
+                });
+                
+                
+                $(function(){
+                    $('#id_locality').change(function(){
+                        var selector = document.getElementById('id_locality');
+                        localStorage.setItem('selected_locality_value', selector[selector.selectedIndex].value);
+                        submit_filter();
+                     });
+                });
+
+                 $(function(){
+                    $('#id_category_type').change(function(){
+                        var selector = document.getElementById('id_category_type');
+                        localStorage.setItem('id_category_type', selector[selector.selectedIndex].value);
+                        submit_filter();
+                    });
+                });
+
+                
+                
+                $(function(){
+                    $('#id_object_type').change(function(){
+                        var selector = document.getElementById('id_object_type');
+                        localStorage.setItem('id_object_type', selector[selector.selectedIndex].value);
+                        submit_filter();
+                    });
+                });
+
+
+                $(function(){
+                    $('#filter_button').click(function(){
+                        if( document.getElementById("collapseExample").style.display=='none' ){
+                            document.getElementById("collapseExample").style.display = 'table-row';
+                            localStorage.removeItem('is_collapsed');
+                        }
+                        else {
+                            // добавить сброс и очистку фильтра
+                            //document.getElementById("collapseExample").style.display = 'none';
+                            localStorage.setItem('id_object_type', 0);
+                            localStorage.setItem('selected_locality_value', 0);
+                            localStorage.setItem('selected_municipality_value', 0);
+                            localStorage.setItem('id_object_type', 0);
+                            localStorage.setItem('is_collapsed', 'yes');
+                            window.location.replace("/panel/");
+                        }
+                    });
+                });
+
+
+                function search_results(id){     
+                    if(id=="") { return; }
+                    $.ajax({
+                    url: "/search_ajax_function/",   
+                    type: 'GET',
+                    data: "search_id="+id,
+                        success: function(response) {
+                            result = JSON.parse(response);  
+                            if (result.error) { 
+                                alert(result.error_text);
+                            } else { 
+                               	//alert(id);
+                                var select = document.getElementById("id_locality");
+                                select.options.length = 0;   
+                                select.options[select.options.length] = new Option('-----------', '');                                        
+								  for(var i=0;i < result.length;i++){
+                                    select.options[select.options.length] = new Option(result[i].name, result[i].id);                                        
+                                } 
+                            }
+                        }
+                    });
+                    }
+
+
+            </script>
+
+        </form>
+        </div>
+    </div>
+    </div>
+    
+    <br>
+    
+
+    <div class="" style="">
+        <div class="col-12">
+           <form id="filter_form" method="get">
+            <table class="table table-bordered table-sm my_table_ " style="font-size:12px;">
+              <form name="delete_data" action="{% url 'delete_data' %}" method="post">
+                {% csrf_token %}
+                {% load widget_tweaks %}
+
+        
+              <thead class="">
+                <tr id="collapseExample" style='display:none;'>
+                  <th scope="col"  style="width:20%"></th>
+                  <th scope="col" style="width:12%">{{filter.form.municipality|add_class:"filter-select-class-long"}}</th>
+                  <th scope="col" style="width:8%">{{filter.form.locality|add_class:"filter-select-class-long"}}</th>
+                  <th scope="col" style="width:32%"></th>
+                  <th scope="col" style="width:5%"></th>
+                  <th scope="col" style="width:13%">{{filter.form.object_type|add_class:"filter-select-class-long"}} </th>
+                  <th scope="col" style="width:20%">{{filter.form.category_type|add_class:"filter-select-class-medium"}}</th>
+                </tr>
+                <!--style='min-width:150px'-->
+                
+                <tr>
+                  <th scope="col" >Наименование</th>
+                  <th scope="col" >Муниципальное образование</th>
+                  <th scope="col" >Населенный пункт</th>
+                  <th scope="col" >Полный адрес</th>
+                  <th scope="col" >Дата создания</th>
+                  <th scope="col" >Тип объекта</th>
+                  <th scope="col" >Категория объекта</th>
+                    {% if request.user.is_authenticated %}
+                    {% endif %}
+                </tr>
+               
+              </thead>
+              <tbody>
+              {% if data|length > 0 %}
+              {% for d in data %}
+                <tr>
+                  {% if request.user.is_authenticated %}
+                    {% endif %}
+                  <td style="width:20%" ><b><a href="#" data-toggle="modal" data-target="#exampleModal{{d.id}}">{% if d.nativeName is None %}{% else %}{{ d.nativeName}}{%endif%}</a></b></td>
+                  <td style="width:12%">{% if d.municipality != 'None' %}{% if d.municipality is None %}{% else %}{{d.municipality}}{%endif%}{%endif%}</td>
+                  <td style="width:8%">{% if d.locality != 'None' %}{% if d.locality is None %}{% else %}{{d.locality}}{%endif%}{%endif%}</td>
+                  <td style="width:32%">{% if d.fullAddress != 'None' %}{% if d.fullAddress is None %}{% else %}{{ d.fullAddress }}{%endif%}{%endif%}</td>
+                  <td style="width:5%">{% if d.create_date != 'None' %}{% if d.create_date is None %}{% else %}{{d.create_date}}{%endif%}{%endif%}</td>
+                  <td style="width:13%">{% if d.object_type != 'None' %}{% if d.object_type is None %}{% else %}{{d.object_type}}{%endif%}{%endif%}</td>
+                  <td style="width:20%">{% if d.category_type != 'None' %}{% if d.category_type is None %}{% else %}{{d.category_type}}{%endif%}{%endif%}</td>
+                    {% if request.user.is_authenticated %}
+                    {% endif %}
+                </tr>
+              {% endfor %}
+              
+                {% else %}
+                <tr>
+                    <td colspan='7'>
+                        <center>Нет данных</center>
+                    </td>
+                </tr>
+                {% endif %}
+              </tbody>
+              </form>
+            </table>
+        </form>
+
+        </div>
+        {% if is_search %}
+        <center>
+            <div style="margin:auto; display: inline-block" >
+                {% if data.has_other_pages %}
+                <ul class="pagination">
+                {% if data.has_previous %}
+                    <li class="page-item"><a href="{{whole_url}}&page={{ data.previous_page_number }}" class="page-link">&laquo;</a></li>
+                {% else %}
+                <li class="page-item disabled"><a href="" class="page-link">&laquo;</a> </li>
+                {% endif %}
+
+                {% for i in data.paginator.page_range %}
+                    {% if data.number > 3 and forloop.first %}
+                        <li class="page-item"><a href="{{whole_url}}&page=1" class="page-link">1</a></li>
+                        <li class="page-item disabled"><a href="" class="page-link">⋯</a></li>
+                    {% endif %}
+                    {% if data.number == i %}
+                    <li class="page-item active"><a href="" class="page-link" >{{ i }}</a></li>
+                        {% elif i > data.number|add:'-3' and i < data.number|add:'3' %}
+                        <li class="page-item"><a href="{{whole_url}}&page={{ i }}" class="page-link">{{ i }}</a></li>
+                    {% endif %}
+                    {% if data.paginator.num_pages > data.number|add:'3' and forloop.last %}
+                        <li class="page-item disabled"><a href="" class="page-link">⋯</a> </li>
+                    <li class="page-item"><a href="{{whole_url}}&page={{ data.paginator.num_pages }}" class="page-link">{{ data.paginator.num_pages }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if data.has_next %}
+                <li class="page-item"><a href="{{whole_url}}&page={{ data.next_page_number }}" class="page-link">&raquo;</a></li>
+                {% else %}
+                <li class="page-item disabled"><a href="" class="page-link">&raquo;</a></li>
+                {% endif %}
+                </ul>
+                {% endif %}
+            </div>
+        </center>
+        {% else %}
+        <center>
+            <div style="margin:auto; display: inline-block" >
+                {% if data.has_other_pages %}
+                <ul class="pagination">
+                {% if data.has_previous %}
+                    <li class="page-item"><a href="{{whole_url}}?page={{ data.previous_page_number }}{{filter_param}}" class="page-link">&laquo;</a></li>
+                {% else %}
+                <li class="page-item disabled"><a href="" class="page-link">&laquo;</a> </li>
+                {% endif %}
+
+                {% for i in data.paginator.page_range %}
+                    {% if data.number > 3 and forloop.first %}
+                        <li class="page-item"><a href="{{whole_url}}?page=1{{filter_param}}" class="page-link">1</a></li>
+                        <li class="page-item disabled"><a href="" class="page-link">⋯</a></li>
+                    {% endif %}
+                    {% if data.number == i %}
+                    <li class="page-item active"><a href="" class="page-link" >{{ i }}</a></li>
+                        {% elif i > data.number|add:'-3' and i < data.number|add:'3' %}
+                        <li class="page-item"><a href="{{whole_url}}?page={{ i }}{{filter_param}}" class="page-link">{{ i }}</a></li>
+                    {% endif %}
+                    {% if data.paginator.num_pages > data.number|add:'3' and forloop.last %}
+                        <li class="page-item disabled"><a href="" class="page-link">⋯</a> </li>
+                    <li class="page-item"><a href="{{whole_url}}?page={{ data.paginator.num_pages }}{{filter_param}}" class="page-link">{{ data.paginator.num_pages }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if data.has_next %}
+                <li class="page-item"><a href="{{whole_url}}?page={{ data.next_page_number }}{{filter_param}}" class="page-link">&raquo;</a></li>
+                {% else %}
+                <li class="page-item disabled"><a href="" class="page-link">&raquo;</a></li>
+                {% endif %}
+                </ul>
+                {% endif %}
+            </div>
+        </center>
+        {% endif %}
+
+        <!--<div class="col-3"></div>-->
+          <!--<div class="col-6">-->
+            <!--{% if search_pag == True %}-->
+              <!--<div class="pagination" style="text-align:center">-->
+                  <!--<span class="step-links">-->
+                      <!--{% if data.has_previous %}-->
+                          <!--<a href="{{ whole_url}}&page=1" class="btn btn-info">&laquo; first</a>-->
+                          <!--<a href="{{ whole_url }}&page={{ data.previous_page_number }}" class="btn btn-info">previous</a>-->
+                      <!--{% endif %}-->
+
+                      <!--<span class="current">-->
+                          <!--Page {{ data.number }} of {{ data.paginator.num_pages }}.-->
+                      <!--</span>-->
+
+                      <!--{% if data.has_next %}-->
+                          <!--<a href="{{ whole_url }}&page={{ data.next_page_number }}" class="btn btn-info">next</a>-->
+                          <!--<a href="{{ whole_url }}&page={{ data.paginator.num_pages }}" class="btn btn-info">last &raquo;</a>-->
+                      <!--{% endif %}-->
+                  <!--</span>-->
+              <!--</div>-->
+            <!--{% else %}-->
+
+            <!--<div class="pagination" style="text-align:center">-->
+                <!--<span class="step-links">-->
+                    <!--{% if data.has_previous %}-->
+                        <!--<a href="?page=1" class="btn btn-info">&laquo; first</a>-->
+                        <!--<a href="?page={{ data.previous_page_number }}" class="btn btn-info">previous</a>-->
+                    <!--{% endif %}-->
+
+                    <!--<span class="current">-->
+                        <!--Page {{ data.number }} of {{ data.paginator.num_pages }}.-->
+                    <!--</span>-->
+
+                    <!--{% if data.has_next %}-->
+                        <!--<a href="?page={{ data.next_page_number }}" class="btn btn-info">next</a>-->
+                        <!--<a href="?page={{ data.paginator.num_pages }}" class="btn btn-info">last &raquo;</a>-->
+                    <!--{% endif %}-->
+                <!--</span>-->
+            <!--</div>-->
+            <!--{% endif %}-->
+          <!--</div>-->
+          <!--<div class="col-3"></div>-->
+    <!--</div>-->
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form enctype="multipart/form-data"  action="{% url 'edit_data' %}" method="post">
+        <div class="modal-body">
+            {% csrf_token %}
+            <input type="hidden" name="id_row_data" id="id_row_data" value="">
+            {{ form|crispy }}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Edit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<!--Modals-->
+<!--
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Launch demo modal
+</button>
+-->
+
+
+<!-- Modal -->
+{% for d in data %}
+  <div class="modal fade text-center" id="exampleModal{{d.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document" >
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">{{d.nativeName}}</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+        <div class="col-sm">
+        </div>
+        <div class="col-12">
+            <!--<div>
+                <a href="" class="btn btn-link">&laquo; Назад</a>
+            </div>-->
+            <table class="table_more_information">
+                <tr>
+                    <td>Наименование:</td>
+                    <td>{% if d.nativeName != None %}{% if d.nativeName != 'None' %}{{d.nativeName}}{% else %}{% endif %}{% endif %}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <tr>
+                    <td>Полный адрес:</td>
+                    <td>{% if d.fullAddress != None %}{% if d.fullAddress != 'None' %}{{d.fullAddress}}{% endif %}{% endif %}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <tr>
+                    <td>Муниципальное образование:</td>
+                    <td>{% if d.municipality != 'None' %}{% if d.municipality != None %}{{d.municipality}}{% else %}{% endif %}{% endif %}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <tr>
+                    <td>Населенный пункт:</td>
+                    <td>{% if d.locality != 'None' %}{% if d.locality != None %}{{d.locality}}{% else %}{% endif %}{% endif %}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                
+                <tr>
+                    <td>Фото:</td>
+                    <td>
+                        {% if d.photo  %}
+                        <img src="/media/{{ d.photo }}" style="width:100px">
+                        {% else %}
+                        <img src="/media/img/noImage.png" style="width:100px">
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <!--
+                <tr>
+                    <td>URL адрес:</td>
+                    <td>{% if d.url != None %}{% if d.url != 'None' %}{{d.url}}{% else %}{% endif %}{% endif %}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                -->
+                <tr>
+                    <td>Описание:</td>
+                    <td>{% if d.description != None %}{% if d.description != 'None' %}{{d.description}}{% else %}{% endif %}{% endif %}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <tr>
+                    <td>Принадлежность к ЮНЭСКО:</td>
+                    <td>{% if d.affiliation_U != None %}{% if d.affiliation_U != 'None' %}{{d.affiliation_U}}{% else %}{% endif %}{% endif %}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <tr>
+                    <td>Особо ценный объект:</td>
+                    <td>{% if d.esp_valuable_object != None %}{% if d.esp_valuable_object != 'None' %}{{d.esp_valuable_object}}{% else %}{% endif %}{% endif %}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <tr>
+                    <td>Реквизиты и наименование акта органа государственной власти о постановке на государственную охрану объекта культурного наследия:</td>
+                    <td>{% if d.requisites_and_title != None %}{% if d.requisites_and_title != 'None' %}{{d.requisites_and_title}}{% else %}{% endif %}{% endif %}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <!--
+                <tr>
+                    <td>Собственник:</td>
+                    <td>{% if d.owner != None %}{% if d.owner != 'None' %}{{d.owner}}{% else %}{% endif %}{% endif %}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <tr>
+                    <td>Под чьим управлением:</td>
+                    <td>{% if d.management != None %}{% if d.management != 'None' %}{{d.management}}{% else %}{% endif %}{% endif %}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <tr>
+                    <td>Контактные данные собственника ОКН:</td>
+                    <td>{% if d.owner_contacts != None %}{% if d.owner_contacts != 'None' %}{{d.owner_contacts}}{% else %}{% endif %}{% endif %}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <tr>
+                    <td>Наличие охранного обязательства ОКН:</td>
+                    <td>{% if d.has_security_obligation != None %}{% if d.has_security_obligation != 'None' %}{{d.has_security_obligation}}{% else %}{% endif %}{% endif %}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <tr>
+                    <td>Наличие паспорта ОКН:</td>
+                    <td>{% if d.has_passport_OKN != None %}{% if d.has_passport_OKN != 'None' %}{{d.has_passport_OKN}}{% else %}{% endif %}{% endif %}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <tr>
+                    <td>Актуальный адрес:</td>
+                    <td>{% if d.actual_address != None %}{% if d.actual_address != 'None' %}{{d.actual_address}}{% else %}{% endif %}{% endif %}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                -->
+                <tr>
+                    <td>Общая видовая принадлежность:</td>
+                    <td>{% if d.gen_species_appearance is None %}{% if d.gen_species_appearance is 'None' %}{% else %}{{d.gen_species_appearance}}{% endif %}{% endif %}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <!--
+                <tr>
+                    <td>Наличие документов о границах территории ОКН:</td>
+                    <td>{% if d.has_docs_boundaries != None %}{% if d.has_docs_boundaries != 'None' %}{{d.has_docs_boundaries}}{% else %}{% endif %}{% endif %}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <tr>
+                    <td>Реквизиты об утверждении границ территории:</td>
+                    <td>{% if d.req_of_approval != 'None' %}{% if d.req_of_approval != 'None' %}{{d.req_of_approval}}{% else %}{% endif %}{% endif %}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <tr>
+                    <td>Наличие документов об утвержденых зонах охраны:</td>
+                    <td>{% if d.has_docs_of_aprroval != None %}{% if d.has_docs_of_aprroval != 'None' %}{{d.has_docs_of_aprroval}}{% else %}{% endif %}{% endif %}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <tr>
+                    <td>Документ об утвержденых зонах охраны:</td>
+                    <td>{% if d.document_on_approved_security != None %}{% if d.document_on_approved_security != 'None' %}{{d.document_on_approved_security}}{% else %}{% endif %}{% endif %}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <tr>
+                    <td>Наличие зарегистрированных прав/обременений:</td>
+                    <td>{% if d.has_rights != None %}{% if d.has_rights != 'None' %}{{d.has_rights}}{% else %}{% endif %}{% endif %}</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><hr></td>
+                </tr>
+                <tr>
+                    <td>Дата:</td>
+                    <td>{% if d.date != 'None' %}{% if d.date != None %}{{d.date}}{% endif %}{% endif %}</td>
+                </tr>
+                -->
+            </table>
+        </div>
+        <div class="col-sm">
+        </div>
+    </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{%endfor%}
+{% endblock %}
+
+{% block jquery %}
+<script>
+  $('#myModal').on('shown.bs.modal', function () {
+    $('#myInput').trigger('focus')
+  })
+
+
+</script>
+
+{% include "dashboard/jq_code_update_form.html" %}
+
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+  $(function() {
+    $( ".datepicker" ).datepicker({
+      changeMonth: true,
+      changeYear: true,
+      yearRange: "1940:2100",
+      // You can put more options here.
+      dateFormat: 'yy-mm-dd',
+    });
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,191 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>
+      {% block title %}
+        Реестр объектов культурного наследия
+        Республики Дагестан 
+      {% endblock %}
+    </title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/theme1.css' %}" rel="stylesheet">
+    <link href="{% static 'css/jquery-ui.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/jquery-ui.structure.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/jquery-ui.theme.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/panel-styles.css' %}" rel="stylesheet">
+    <link href="{% static 'css/base-styles.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap-select.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/4-col-portfolio.css' %}" rel="stylesheet">
+    <link href="{% static 'css/jquery-filestyle.min.css' %}" rel="stylesheet">
+    
+
+        
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
+   
+    <!-- Custom scripts for this template -->
+   
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap-select.min.js' %}"></script>
+    <script src="{% static 'js/defaults-ru_RU.min.js' %}"></script>
+    <script src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'js/panel-scripts.js' %}"></script>
+    <script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap-filestyle.min.js' %}"></script>
+    <script src="{% static 'js/jquery-filestyle.min.js' %}"></script>
+    
+
+    <!--
+    <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+    -->
+
+  </head>
+
+  <body>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top my_navbar my_navbar_ext">
+      <a style='padding-bottom:20px; padding-left:100px;' class="navbar-brand" href="{% url 'panel' %}"><img src="/media/img/russian_herb.png" style="width:75px;"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="" style='font-family: Roboto; font-style: normal; font-weight: 500; font-size: 16px; line-height: normal; padding-left:20px;'>
+                Реестр объектов культурного наследия<br>
+                Республики Дагестан
+              </a>
+            </li>
+        </ul >
+        <ul class="navbar-nav navbar-right" style='font-size:14px; font-weight: 500;' >
+          <li class="nav-item">
+              <a  class="nav-link {% if request.path == '/panel/' %}active_link{% endif %}" href="{% url 'panel' %}">
+                ДАННЫЕ
+              </a>
+          </li>
+          <li class="nav-item" style='margin-right:95px'>
+              <a class="nav-link {% if request.path == '/about/' %}active_link{% endif %}" href="{% url 'about' %}">
+                О ПОРТАЛЕ
+              </a>
+          </li>
+        </ul>
+      </div>
+     
+    </nav>
+
+<!--
+<span class='left' style='position:absolute, left:10px; width:50px; height:50px'></span>
+    <span class='right' style='position:absolute, right: 10px; width:50px; height:50px'></span>
+
+-->     
+   
+    {% block content %}
+    
+
+    {% endblock %}
+    
+
+
+    <!-- Footer -->
+    <footer class="page-footer font-small blue my_footer">
+      <div class="row" style='padding-top:40px'>
+        
+        
+        <div class="col-md-5" style='text-align:center; padding-left:40px'>
+          <p ><img src='/media/img/footer_logo.png'></p>
+          <h6 class="text-uppercase" style='margin:10px'>Агентство по охране культурного<br>
+                                                          наследия Республики Дагестан </h6>
+          <center><div style='height:1px; background:#fff; width:60%;'></div></center>
+          <!--
+          <p style='margin:10px'>Законодательные требования к официальным сайтам <br> федеральных органов исполнительной власти</p>
+          -->
+        </div>
+
+        <hr class="clearfix w-100 d-md-none pb-3">
+
+
+
+        <div class="col-md-2" style='text-align:center; padding-top:60px'>
+          <ul class="list-unstyled" >
+              <li>
+                <a href="{% url 'panel' %}" >Данные</a>
+              </li>
+              <li>
+                <a href="{% url 'about' %}">О портале</a>
+              </li>
+            </ul>
+        </div>
+
+
+
+        <div class="col-md-5" >
+        <div class='row'>
+          <div class='col-md-4'>
+          </div>
+          <div class='col-md-8 text-center' style='padding-top:30px' >
+              
+              <div class='row' style='margin-bottom:10px'>
+                <div class='col-md-12 text-left' >
+                  <span style='margin-right:5px'><img src='/media/img/point.png'></span> 
+			Республика Дагестан, г.Махачкала, ул. Гусейнова 26
+                </div>
+              </div>
+              
+              <div class='row' style='margin-bottom:10px'>
+                <div class='col-md-12 text-left'>
+                   <span style='margin-right:5px'><img src='/media/img/phone.png'></span>+7(906)-482-44-33
+                </div>
+              </div>
+             
+<!-- 
+              <div class='row' style='margin-bottom:10px'>
+                <div class='col-md-12 text-left'>
+                  Мы в социальных сетях:
+                </div>
+              </div>
+-->              
+              <div class='row' style='margin-bottom:10px'>
+               <div class='col-md-12 text-left' >
+                  <!--
+		  <a href=''><span ><img src='/media/img/twitter.png'></span></a>
+      
+		  <a href=''><span ><img src='/media/img/fb.png'></span></a>
+                  --> 
+                               
+		<a href='https://www.instagram.com/dagnasledie/'><span ><img src='/media/img/insta.png' width=30px alt='@dagnasledie'></span></a>
+                <a href='https://www.instagram.com/dagnasledie/'><span >@dagnasledie</span></a>
+
+                </div>
+              </div>
+           </div>
+         </div>
+      </div>
+      </div>
+     
+    
+    <div class="footer-copyright text-center py-3">
+      © 2018: Агентство по охране культурного наследия РД
+    </div>
+
+
+  </footer>
+  {% block jquery%}
+  {% endblock %}
+  
+  </body>
+
+</html>
